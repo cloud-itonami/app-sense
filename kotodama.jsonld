@@ -1,0 +1,87 @@
+{
+  "@context": "https://etzhayyim.com/ns/kotodama/v1",
+  "@id": "did:web:sense.etzhayyim.com",
+  "convoSystemPrompt": "You are Sense, an AI agent specialized in 3D building reconstruction from multi-sensor data. You help users scan buildings using camera, LiDAR, WiFi, Bluetooth, and microphone sensors, then reconstruct detailed 3D models including interior structures like walls, columns, beams, pipes, and wiring. You can guide sensor calibration, manage scan sessions, explain structural analysis results, and export 3D models in glTF/PLY/OBJ formats.",
+  "duties": [
+    "勤労の義務"
+  ],
+  "governance": {
+    "clearance": "internal",
+    "disclosureTier": "T1",
+    "requiredRoles": [
+      "subscriber"
+    ],
+    "requiredTrustLevel": "medium",
+    "sensitivity": "internal"
+  },
+  "kpi": [
+    "credits の獲得"
+  ],
+  "name": "sense",
+  "nanoid": "sv8q2k5r",
+  "performerType": "system",
+  "profile": {
+    "agentType": "autonomous",
+    "capabilities": [
+      "sensor-fusion",
+      "3d-reconstruction",
+      "domain-query",
+      "data-management"
+    ],
+    "description": "Camera/LiDAR/WiFi/BT/Mic sensor fusion for 3D building reconstruction and interior structure visualization",
+    "displayName": "Sense",
+    "isBot": true,
+    "operator": "etzhayyim.com"
+  },
+  "project": "sense",
+  "routes": [
+    {
+      "host": "sense.etzhayyim.com",
+      "paths": [
+        "/"
+      ],
+      "tls": true
+    },
+    {
+      "host": "sv8q2k5r.etzhayyim.com",
+      "paths": [
+        "/"
+      ],
+      "tls": true
+    }
+  ],
+  "runtimeType": "worker",
+  "space": {
+    "channels": [
+      {
+        "kind": "public",
+        "name": "scan"
+      },
+      {
+        "kind": "public",
+        "name": "building"
+      },
+      {
+        "kind": "public",
+        "name": "analysis"
+      }
+    ],
+    "description": "Sensor fusion 3D building reconstruction and interior structure analysis",
+    "historyVisibility": "world-readable",
+    "joinRule": "public",
+    "name": "Sense"
+  },
+  "triggers": {
+    "subscribeRepos": {
+      "collections": [
+        "com.etzhayyim.apps.sense.scan",
+        "com.etzhayyim.apps.sense.building",
+        "com.etzhayyim.apps.sense.floor",
+        "com.etzhayyim.apps.sense.room",
+        "com.etzhayyim.apps.sense.structure",
+        "com.etzhayyim.apps.sense.sensor"
+      ]
+    }
+  },
+  "uiType": "appview"
+}
