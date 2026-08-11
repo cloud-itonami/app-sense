@@ -1,1 +1,7 @@
-{:schema "etzhayyim.repository/v1" :repository "etzhayyim/com-etzhayyim-app-sense" :kind :standalone-app-artifact :canonical-record-format :edn :source-path "60-apps/etzhayyim-project-sense"}
+{:schema "etzhayyim.repository/v1"
+ :repository "cloud-itonami/app-sense"
+ :kind :standalone-app-artifact
+ :canonical-record-format :edn
+ :source-path "60-apps/etzhayyim-project-sense"
+ :boundary {:role :building-scan-application
+            :spatial-application "cloud-itonami/app-maps"}}
