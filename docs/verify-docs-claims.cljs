@@ -79,9 +79,27 @@
 ;; ---------------------------------------------------------------- 検査
 
 ;; 1) 継承した 6 ファイルが全部まだ在る（後から消えたら文書は嘘になる）
-(let [missing (remove (set tracked) pre-existing)]
-  (check! "pre-existing files still tracked" (empty? missing)
-          (if (empty? missing) "6/6 tracked" (str "missing: " (str/join ", " missing)))))
+(def ^:private missing-pre-existing (remove (set tracked) pre-existing))
+
+(check! "pre-existing files still tracked" (empty? missing-pre-existing)
+        (if (empty? missing-pre-existing)
+          "6/6 tracked"
+          (str "missing: " (str/join ", " missing-pre-existing))))
+
+;; これは**前提条件**なので、ここで確定的に赤で降りる。以降の check の大半は
+;; この 6 ファイルの中身を読むので、1 つ欠けると reader が先に die! 3 して
+;; 「消えた」という測定結果が UNDETERMINED に化ける（実測 2 回: blob-bytes と
+;; slurp* の両方で起きた）。ファイルが消えたのは *測れた事実* であって
+;; 測れなかったことではない —— exit 1 で、何が消えたかを名指しして終わる。
+(when (seq missing-pre-existing)
+  (println (str "CHECKED\t" (count @results)))
+  (doseq [{:keys [label ok? detail]} @results]
+    (println (str (if ok? "ok  " "FAIL") "\t" label (when (seq detail) (str "\t— " detail)))))
+  (die! 1 (str "\nこの文書が記述している " (count missing-pre-existing)
+               " ファイルが repo から消えている: "
+               (str/join ", " missing-pre-existing)
+               "\n残りの検査はその中身を読むので走らせない（走らせれば"
+               "『判定できなかった』が返り、消えたという確定した事実が隠れる）。")))
 
 ;; 2) 合計 = 24973 B、継承 4 ファイル = 24289 B（migration.edn の :bytes）
 (defn- bytes-check! [label want paths]
