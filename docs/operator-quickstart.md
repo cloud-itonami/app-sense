@@ -31,11 +31,20 @@ $ git ls-files
 CLAUDE.md
 NOTICE
 README.edn
+README.md
+docs/operator-quickstart.md
+docs/verify-docs-claims.cljs
 kotodama.jsonld
 migration.edn
 src/app.ts
+```
 
-$ git ls-files -z | xargs -0 wc -c | sort -rn
+Three of those nine (`README.md` and the two under `docs/`) are this
+documentation. **The repository proper is the other six**, and they are the ones
+every number here describes:
+
+```bash
+$ git ls-files -z | grep -zvE '^(README\.md|docs/)' | xargs -0 wc -c | sort -rn
    24973 total
    14395 src/app.ts
     7027 CLAUDE.md
@@ -45,9 +54,9 @@ $ git ls-files -z | xargs -0 wc -c | sort -rn
      290 README.edn
 ```
 
-Six files, 24,973 bytes, three commits. That is the whole repository — there is
-no hidden subtree, no submodule, and no `wasm/` directory despite what
-`CLAUDE.md` describes.
+Six files, **24,973 bytes** — measured at `3b8a4ed`, the commit before this
+documentation was added. That is the whole repository: no hidden subtree, no
+submodule, and no `wasm/` directory despite what `CLAUDE.md` describes.
 
 ## 3. Confirm that nothing builds (and why)
 
@@ -99,11 +108,16 @@ old name and the one the successor facade now declares:
 
 ```bash
 $ for p in '@etzhayyim%2fkotodama-host-sdk' '@etzhayyim%2fkotoba-kotodama-host-sdk'; do
-    curl -sS -o /dev/null -w "$p -> %{http_code}\n" "https://registry.npmjs.org/$p"
+    printf '%-38s %s\n' "$p" \
+      "$(curl -sS -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/$p")"
   done
-@etzhayyim%2fkotodama-host-sdk       -> 404
-@etzhayyim%2fkotoba-kotodama-host-sdk -> 404
+@etzhayyim%2fkotodama-host-sdk         404
+@etzhayyim%2fkotoba-kotodama-host-sdk  404
 ```
+
+(Keep `%{http_code}` as the whole `-w` value. Interpolating the package name
+into `-w` fails: these names start with `@`, and curl reads a `-w` argument
+beginning with `@` as a filename to read the format from.)
 
 The successor contract is EDN, and exposes four operations, not the nine
 functions this file calls:

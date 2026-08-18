@@ -18,8 +18,9 @@ trusting any of them.
 | `NOTICE` | 499 | Apache-2.0 + etzhayyim Charter Rider v3.1. Directs the reader to `CHARTER-RIDER.md`, which is not in this repository |
 | `README.edn` + `migration.edn` | 684 | canonical EDN records, added by the extraction |
 
-Six tracked files, **24,973 bytes**, three commits, last commit 2026-08-11.
-Zero test files; this commit adds none.
+Six tracked files, **24,973 bytes**, three commits, last commit 2026-08-11 —
+measured at `3b8a4ed`, before this documentation was added. Zero test files;
+this commit adds none.
 
 Start at [`docs/operator-quickstart.md`](docs/operator-quickstart.md).
 
@@ -121,7 +122,7 @@ tree. Specifically it documents:
 |---|---|
 | five Rust WASM modules — `sense-pointcloud`, `sense-mesh`, `sense-acoustic`, `sense-signal`, `sense-fusion` — with their algorithms | **no `wasm/` directory**; no repository by any of those names is registered in the superproject's west manifest (4,214 projects) |
 | a build step, `cd wasm/etzhayyim-wasm-sense-{name}-{nanoid} && cargo component build` | that path does not exist |
-| a KAMI wgpu 3D renderer as the visualization layer | not referenced by any file here |
+| a KAMI wgpu 3D renderer as the visualization layer | named 3× in `CLAUDE.md` and nowhere else — no code or config here references it |
 | a SQL/graph query layer | removed from all 12 read paths, dated 2026-04-12 |
 
 Read `CLAUDE.md` as the monorepo-era design intent, not as a description of this
@@ -143,7 +144,9 @@ here could be deployed to those hosts anyway.
   against the EDN/CLJC host contract *and* choosing a store to replace the one
   deprecated on 2026-04-12. Neither decision is recorded anywhere.
 - **Where the five WASM compute modules went.** They are named with nanoids in
-  `CLAUDE.md` and exist in no repository this workspace knows about.
+  `CLAUDE.md`, and no repository by those names is registered in the
+  superproject's west manifest. That bounds the search to what west knows; it is
+  not proof they exist nowhere.
 - **Whether `app-maps` expects this repo.** `README.edn` declares
   `:boundary {:spatial-application "cloud-itonami/app-maps"}`. `app-maps` is a
   substantial, buildable repository — and it **does not mention `app-sense` or
