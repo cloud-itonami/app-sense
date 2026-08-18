@@ -54,11 +54,23 @@
 (def ^:private canonical-records ["README.edn" "migration.edn"])
 (def ^:private pre-existing (into inherited canonical-records))
 
+;; tracked に無いパスは「測れなかった」ではなく「消えたという測定結果」なので
+;; nil を返して FAIL に落とす。ここを die! 3 にすると、ファイルが 1 つ消えただけで
+;; 「判定できなかった」になり、消えたことを報告している check 1 の FAIL が
+;; 出力される前に握り潰される（実測: kotodama.jsonld を消して exit 3 になった）。
+;; tracked に在るのに読めない場合だけが本当の「判定できなかった」。
 (defn- blob-bytes [p]
-  (let [n (js/parseInt (git "cat-file" "-s" (git "rev-parse" (str "HEAD:" p))) 10)]
-    (if (js/isNaN n)
-      (die! 3 "UNDETERMINED:" p "の blob サイズが読めなかった")
-      n)))
+  (when (some #{p} tracked)
+    (let [n (js/parseInt (git "cat-file" "-s" (git "rev-parse" (str "HEAD:" p))) 10)]
+      (if (js/isNaN n)
+        (die! 3 "UNDETERMINED:" p "は tracked なのに blob サイズが読めなかった")
+        n))))
+
+(defn- sum-bytes
+  "欠けているパスがあれば nil。合計を 0 に丸めて「小さくなった」と報告しない。"
+  [paths]
+  (let [ns (map blob-bytes paths)]
+    (when (every? some? ns) (reduce + 0 ns))))
 
 (def ^:private results (atom []))
 (defn- check! [label ok? detail]
@@ -72,12 +84,14 @@
           (if (empty? missing) "6/6 tracked" (str "missing: " (str/join ", " missing)))))
 
 ;; 2) 合計 = 24973 B、継承 4 ファイル = 24289 B（migration.edn の :bytes）
-(let [total (reduce + 0 (map blob-bytes pre-existing))]
-  (check! "pre-existing bytes = 24973" (= 24973 total) (str total " B")))
-(let [inh (reduce + 0 (map blob-bytes inherited))]
-  (check! "inherited bytes = 24289 (migration.edn :bytes)" (= 24289 inh) (str inh " B")))
-(check! "src/app.ts = 14395 B" (= 14395 (blob-bytes "src/app.ts")) (str (blob-bytes "src/app.ts") " B"))
-(check! "CLAUDE.md = 7027 B" (= 7027 (blob-bytes "CLAUDE.md")) (str (blob-bytes "CLAUDE.md") " B"))
+(defn- bytes-check! [label want paths]
+  (let [got (sum-bytes paths)]
+    (check! label (= want got) (if got (str got " B") "a file is missing — not measurable"))))
+
+(bytes-check! "pre-existing bytes = 24973" 24973 pre-existing)
+(bytes-check! "inherited bytes = 24289 (migration.edn :bytes)" 24289 inherited)
+(bytes-check! "src/app.ts = 14395 B" 14395 ["src/app.ts"])
+(bytes-check! "CLAUDE.md = 7027 B" 7027 ["CLAUDE.md"])
 
 ;; 3) migration.edn 自身が 4 / 24289 / 691c245 / bf8574b を主張し続けている
 (let [m (slurp* "migration.edn")]
