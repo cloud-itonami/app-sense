@@ -240,7 +240,7 @@ no deploy configuration in the repository, so nothing here targets them.
 ## 7. Re-measure everything this documentation claims
 
 ```bash
-nbb docs/verify-docs-claims.cljk
+kbb --backend sci docs/verify-docs-claims.cljk
 ```
 
 - `0` — every claim re-measured and matched.
