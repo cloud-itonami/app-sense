@@ -33,7 +33,7 @@ NOTICE
 README.edn
 README.md
 docs/operator-quickstart.md
-docs/verify-docs-claims.cljs
+docs/verify-docs-claims.cljk
 kotodama.jsonld
 migration.edn
 src/app.ts
@@ -240,7 +240,7 @@ no deploy configuration in the repository, so nothing here targets them.
 ## 7. Re-measure everything this documentation claims
 
 ```bash
-nbb docs/verify-docs-claims.cljs
+nbb docs/verify-docs-claims.cljk
 ```
 
 - `0` — every claim re-measured and matched.

@@ -7,7 +7,7 @@ typechecked, or deployed, and it contains no tests.**
 
 Every number on this page was measured on 2026-08-19 at `3b8a4ed` (macOS 15
 `Darwin 25.3.0`, node v26.3.0, tsc 5.9.2, esbuild 0.28.0) and is re-measured by
-[`docs/verify-docs-claims.cljs`](docs/verify-docs-claims.cljs). Run that before
+[`docs/verify-docs-claims.cljk`](docs/verify-docs-claims.cljk). Run that before
 trusting any of them.
 
 | path | bytes | state |

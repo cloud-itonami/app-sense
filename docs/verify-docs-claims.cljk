@@ -2,7 +2,7 @@
 ;; verify-docs-claims.cljs — README.md と docs/operator-quickstart.md が
 ;; 「測った」と言っている数を、実際に測り直して突き合わせる。
 ;;
-;;   nbb docs/verify-docs-claims.cljs
+;;   nbb docs/verify-docs-claims.cljk
 ;;
 ;; exit 0 = PASS / 1 = FAIL / 3 = 判定できなかった（0 でも 1 でもない）
 ;;
