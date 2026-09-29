@@ -13,7 +13,7 @@ trusting any of them.
 | path | bytes | state |
 |---|---|---|
 | `src/app.ts` | 14,395 | 363 lines. Registers **23 commands**. Imports 9 names from `@etzhayyim/kotodama-host-sdk`, **a package that no longer exists** (§ *Why nothing builds*). **12 of the 23 handlers have had their read path removed** and return an empty result by construction (§ *Half the commands cannot answer*) |
-| `CLAUDE.md` | 7,027 | the design document. Describes **five Rust WASM compute modules and a `wasm/` build tree that are not in this repository** — and are not registered anywhere in the superproject (§ *What the design document describes but does not contain*) |
+| `AGENTS.md` | 7,027 | the design document. Describes **five Rust WASM compute modules and a `wasm/` build tree that are not in this repository** — and are not registered anywhere in the superproject (§ *What the design document describes but does not contain*) |
 | `kotodama.jsonld` | 2,368 | the agent record: DID, capabilities, space, and two HTTP routes. **Neither route resolves in DNS** |
 | `NOTICE` | 499 | Apache-2.0 + etzhayyim Charter Rider v3.1. Directs the reader to `CHARTER-RIDER.md`, which is not in this repository |
 | `README.edn` + `migration.edn` | 684 | canonical EDN records, added by the extraction |
@@ -109,23 +109,23 @@ Those 12 are `cmdScanGet`, `cmdScanList`, `cmdBuildingGet`, `cmdBuildingList`,
 `kindClause` SQL fragment that is then never used.
 
 This matters beyond "it doesn't build": were the SDK restored unchanged, the app
-would start and answer every query with nothing. `CLAUDE.md` still documents the
+would start and answer every query with nothing. `AGENTS.md` still documents the
 graph schema (`(:Building)-[:HAS_FLOOR]->(:Floor)…`) that these handlers used to
 query. **No replacement store is referenced anywhere in this repository.**
 
 ## What the design document describes but does not contain
 
-`CLAUDE.md` is a full architecture for a system substantially larger than this
+`AGENTS.md` is a full architecture for a system substantially larger than this
 tree. Specifically it documents:
 
 | documented | present here |
 |---|---|
 | five Rust WASM modules — `sense-pointcloud`, `sense-mesh`, `sense-acoustic`, `sense-signal`, `sense-fusion` — with their algorithms | **no `wasm/` directory**; no repository by any of those names is registered in the superproject's west manifest (4,214 projects) |
 | a build step, `cd wasm/etzhayyim-wasm-sense-{name}-{nanoid} && cargo component build` | that path does not exist |
-| a KAMI wgpu 3D renderer as the visualization layer | named 3× in `CLAUDE.md` and nowhere else — no code or config here references it |
+| a KAMI wgpu 3D renderer as the visualization layer | named 3× in `AGENTS.md` and nowhere else — no code or config here references it |
 | a SQL/graph query layer | removed from all 12 read paths, dated 2026-04-12 |
 
-Read `CLAUDE.md` as the monorepo-era design intent, not as a description of this
+Read `AGENTS.md` as the monorepo-era design intent, not as a description of this
 repository. Note also that its "全て Rust WASM" instruction conflicts with the
 superproject's standing rule against writing new Rust; that conflict is inherited
 and is an owner question, not something this documentation resolves.
@@ -144,7 +144,7 @@ here could be deployed to those hosts anyway.
   against the EDN/CLJC host contract *and* choosing a store to replace the one
   deprecated on 2026-04-12. Neither decision is recorded anywhere.
 - **Where the five WASM compute modules went.** They are named with nanoids in
-  `CLAUDE.md`, and no repository by those names is registered in the
+  `AGENTS.md`, and no repository by those names is registered in the
   superproject's west manifest. That bounds the search to what west knows; it is
   not proof they exist nowhere.
 - **Whether `app-maps` expects this repo.** `README.edn` declares

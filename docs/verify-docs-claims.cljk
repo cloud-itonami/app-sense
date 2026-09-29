@@ -16,7 +16,7 @@
 ;;
 ;;   代わりにここでは *この repo の中だけで決まる原因* を検査する —— ビルド
 ;;   マニフェストが 0 件であること、import 指定子が消えた側の名前であること、
-;;   23 中 12 の handler が stub であること、CLAUDE.md が持っていない wasm/ を
+;;   23 中 12 の handler が stub であること、AGENTS.md が持っていない wasm/ を
 ;;   記述していること。
 
 (require '["node:child_process" :as cp]
@@ -50,7 +50,7 @@
 
 ;; 抽出が運んだ 4 ファイル + 抽出自身が足した 2 ファイル。
 ;; 文書の数はこの集合について述べており、後から足す文書（この docs/ を含む）は含まない。
-(def ^:private inherited ["CLAUDE.md" "NOTICE" "kotodama.jsonld" "src/app.ts"])
+(def ^:private inherited ["AGENTS.md" "NOTICE" "kotodama.jsonld" "src/app.ts"])
 (def ^:private canonical-records ["README.edn" "migration.edn"])
 (def ^:private pre-existing (into inherited canonical-records))
 
@@ -109,7 +109,7 @@
 (bytes-check! "pre-existing bytes = 24973" 24973 pre-existing)
 (bytes-check! "inherited bytes = 24289 (migration.edn :bytes)" 24289 inherited)
 (bytes-check! "src/app.ts = 14395 B" 14395 ["src/app.ts"])
-(bytes-check! "CLAUDE.md = 7027 B" 7027 ["CLAUDE.md"])
+(bytes-check! "AGENTS.md = 7027 B" 7027 ["AGENTS.md"])
 
 ;; 3) migration.edn 自身が 4 / 24289 / 691c245 / bf8574b を主張し続けている
 (let [m (slurp* "migration.edn")]
@@ -179,16 +179,16 @@
   (check! "src/app.ts is 363 lines" (= 363 (count (str/split-lines src)))
           (str (count (str/split-lines src)))))
 
-;; 8) CLAUDE.md が、この repo に無いものを記述し続けている
-(let [c (slurp* "CLAUDE.md")
+;; 8) AGENTS.md が、この repo に無いものを記述し続けている
+(let [c (slurp* "AGENTS.md")
       modules ["sense-pointcloud" "sense-mesh" "sense-acoustic" "sense-signal" "sense-fusion"]]
-  (check! "CLAUDE.md names all 5 WASM modules" (every? #(str/includes? c %) modules)
+  (check! "AGENTS.md names all 5 WASM modules" (every? #(str/includes? c %) modules)
           (str (count (filter #(str/includes? c %) modules)) "/5"))
-  (check! "CLAUDE.md documents a wasm/ build path"
+  (check! "AGENTS.md documents a wasm/ build path"
           (str/includes? c "cd wasm/etzhayyim-wasm-sense-") "")
   (check! "no wasm/ tree in this repo"
           (not-any? #(str/starts-with? % "wasm/") tracked) "")
-  (check! "CLAUDE.md documents the removed SQL graph layer"
+  (check! "AGENTS.md documents the removed SQL graph layer"
           (str/includes? c "HAS_FLOOR") ""))
 
 ;; 9) NOTICE が指す CHARTER-RIDER.md が無い
