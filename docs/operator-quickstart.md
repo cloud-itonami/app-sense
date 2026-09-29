@@ -28,7 +28,7 @@ and `cloud-itonami/main`. The checkout also sits on a detached HEAD at
 
 ```bash
 $ git ls-files
-CLAUDE.md
+AGENTS.md
 NOTICE
 README.edn
 README.md
@@ -47,7 +47,7 @@ every number here describes:
 $ git ls-files -z | grep -zvE '^(README\.md|docs/)' | xargs -0 wc -c | sort -rn
    24973 total
    14395 src/app.ts
-    7027 CLAUDE.md
+    7027 AGENTS.md
     2368 kotodama.jsonld
      499 NOTICE
      394 migration.edn
@@ -56,7 +56,7 @@ $ git ls-files -z | grep -zvE '^(README\.md|docs/)' | xargs -0 wc -c | sort -rn
 
 Six files, **24,973 bytes** — measured at `3b8a4ed`, the commit before this
 documentation was added. That is the whole repository: no hidden subtree, no
-submodule, and no `wasm/` directory despite what `CLAUDE.md` describes.
+submodule, and no `wasm/` directory despite what `AGENTS.md` describes.
 
 ## 3. Confirm that nothing builds (and why)
 
@@ -170,7 +170,7 @@ With a checkout of `etzhayyim/root` available (in the superproject it is at
 R=~/github/com-junkawasaki
 REV=691c245da48f3acb11dd757218f189ff2482b1c8
 SP=60-apps/etzhayyim-project-sense
-for f in CLAUDE.md NOTICE kotodama.jsonld src/app.ts; do
+for f in AGENTS.md NOTICE kotodama.jsonld src/app.ts; do
   dst=$(git rev-parse "HEAD:$f")
   src=$(git -C $R/orgs/etzhayyim/root rev-parse "$REV:$SP/$f")
   [ "$dst" = "$src" ] && echo "ok   $f" || echo "DIFF $f"
@@ -259,14 +259,14 @@ the same value as "looked and found nothing wrong":
 
 The verifier instead checks the *causes that live inside this repository*: that
 there are zero build manifests, that the import specifier is exactly the one
-that is gone, that 12 of 23 handlers are stubbed, and that `CLAUDE.md` still
+that is gone, that 12 of 23 handlers are stubbed, and that `AGENTS.md` still
 describes a `wasm/` tree the repository does not have. Run §3, §4 and §6 by hand.
 
 ## 8. What you cannot answer from here
 
 - **Whether the port is wanted**, and against which store — the one the read
   paths used was deprecated 2026-04-12 and no replacement is named anywhere.
-- **Where the five WASM compute modules went.** `CLAUDE.md` names them with
+- **Where the five WASM compute modules went.** `AGENTS.md` names them with
   nanoids; no repository by those names is registered in the superproject's west
   manifest (4,214 projects).
 - **Whether `app-maps` expects this repo.** `README.edn` points at
